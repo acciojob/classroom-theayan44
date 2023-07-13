@@ -24,11 +24,13 @@ public class StudentRepository {
     }
 
     public void addStudentTeacherPair(String student, String teacher) {
+        if(!studentDb.containsKey(student) || !teacherDb.containsKey(teacher))
+            return;
         List<String> studentsList = new ArrayList<>();
         if(teacherStudentDb.containsKey(teacher))
             studentsList = teacherStudentDb.get(teacher);
-        if(!studentsList.contains(student))
-            studentsList.add(student);
+//        if(!studentsList.contains(student))
+        studentsList.add(student);
         teacherStudentDb.put(teacher, studentsList);
     }
 
@@ -45,7 +47,7 @@ public class StudentRepository {
     }
 
     public List<String> getStudentsByTeacherName(String teacher) {
-        if(!teacherDb.containsKey(teacher) || !teacherStudentDb.containsKey(teacher))
+        if(!teacherDb.containsKey(teacher))
             return null;
         return teacherStudentDb.get(teacher);
     }
