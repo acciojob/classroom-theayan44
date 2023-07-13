@@ -53,7 +53,11 @@ public class StudentRepository {
     }
 
     public List<String> getAllStudents() {
-        return new ArrayList<>(studentDb.keySet());
+        List<String> studentList = new ArrayList<>();
+        for(String currStudent : studentDb.keySet()){
+            studentList.add(currStudent);
+        }
+        return studentList;
     }
 
     public void deleteTeacherByName(String teacher) {
