@@ -2,10 +2,7 @@ package com.driver;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class StudentRepository {
@@ -35,20 +32,20 @@ public class StudentRepository {
     }
 
     public Student getStudentByName(String name) {
-        if(!studentDb.containsKey(name))
-            return null;
+//        if(!studentDb.containsKey(name))
+//            return null;
         return studentDb.get(name);
     }
 
     public Teacher getTeacherByName(String name) {
-        if(!teacherDb.containsKey(name))
-            return null;
+//        if(!teacherDb.containsKey(name))
+//            return null;
         return teacherDb.get(name);
     }
 
     public List<String> getStudentsByTeacherName(String teacher) {
         if(!teacherDb.containsKey(teacher))
-            return null;
+            return new ArrayList<>();
         return teacherStudentDb.get(teacher);
     }
 
@@ -61,11 +58,32 @@ public class StudentRepository {
     }
 
     public void deleteTeacherByName(String teacher) {
+        List<String> studentList = new ArrayList<>();
+        if(teacherStudentDb.containsKey(teacher))
+            studentList = teacherStudentDb.get(teacher);
+
+        for(String currStudent : studentList){
+            if(studentDb.containsKey(currStudent))
+                studentDb.remove(currStudent);
+        }
+
         teacherDb.remove(teacher);
         teacherStudentDb.remove(teacher);
     }
 
     public void deleteAllTeachers() {
+        HashSet<String> studentsSet = new HashSet<>();
+        for(String currTeacher : teacherStudentDb.keySet()){
+            List<String> studentsList = teacherStudentDb.get(currTeacher);
+            for(String currStudent : studentsList){
+                studentsSet.add(currStudent);
+            }
+        }
+        for(String currStudent : studentsSet){
+            if(studentDb.containsKey(currStudent))
+                studentDb.remove(currStudent);
+        }
+
         teacherStudentDb.clear();
         teacherDb.clear();
     }
